@@ -6,6 +6,19 @@ from mosquito_graphormer import CoVFourLoss, FEATURE_NAMES, ForecastBackbone, Mo
 
 
 class ModelTests(unittest.TestCase):
+    def test_recent_mobility_receives_higher_weight(self):
+        from mosquito_graphormer.graph import MobilityGeographicGraph
+
+        graph = MobilityGeographicGraph()
+        mobility = torch.zeros(1, 14, 3, 3)
+        mobility[0, 0, 0, 1] = 1.0
+        mobility[0, -1, 0, 2] = 1.0
+        cross = graph.cross_graph(
+            mobility, torch.zeros(3, 3),
+            torch.zeros(3, 3, dtype=torch.bool), use_gis=False,
+        )
+        self.assertGreater(float(cross[0, 0, 2]), float(cross[0, 0, 1]))
+
     def test_forecast_and_mechanism_gradient(self):
         torch.manual_seed(11)
         names = list(FEATURE_NAMES)

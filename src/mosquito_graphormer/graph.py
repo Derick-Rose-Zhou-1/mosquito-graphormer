@@ -27,7 +27,8 @@ class MobilityGeographicGraph(nn.Module):
         if n != n2 or distance.shape != (n, n): raise ValueError("invalid graph shapes")
         device, dtype = mobility.device, mobility.dtype
         offdiag = ~torch.eye(n, dtype=torch.bool, device=device)
-        lag = torch.arange(lags, device=device, dtype=dtype)
+        # Input history runs from oldest to newest; lag zero is the latest day.
+        lag = torch.arange(lags - 1, -1, -1, device=device, dtype=dtype)
         weights = torch.softmax(-self.lambda_mobility() * lag, 0)
         mob = (mobility.clamp_min(0) * weights[None, :, None, None]).sum(1) if use_mobility else torch.zeros((b, n, n), device=device, dtype=dtype)
         mob = mob.masked_fill(~offdiag[None], 0.0)
