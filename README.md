@@ -9,6 +9,7 @@ Code for the selected temporal–graph forecasting architecture, its coupled SEI
 - `src/mosquito_graphormer/loss.py`: four-component coefficient-of-variation loss.
 - `src/mosquito_graphormer/evaluation.py` and `plotting.py`: generic metrics and curve plotting.
 - `src/mosquito_graphormer/preprocessing.py` and `workflow.py`: reusable input transforms, aligned-panel validation, training, development checkpoint selection and test evaluation.
+- `src/mosquito_graphormer/surveillance.py`: reporting perturbations applied to an externally supplied synthetic epidemic while retaining its reference targets.
 - `scripts/`: a runnable generated-panel example, training entry point and curve plotting entry point; see [WORKFLOW.md](WORKFLOW.md).
 - `tests/`: synthetic-input execution and gradient check.
 

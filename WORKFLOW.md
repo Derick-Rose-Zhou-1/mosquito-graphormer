@@ -29,3 +29,12 @@ holders. Manuscript estimates should not be attributed to the generated
 example. The reported article analyses also use setting-specific model fits,
 external inputs, split rules and aggregation steps not encoded in this generic
 panel runner.
+
+`apply_reporting_scenario` in `src/mosquito_graphormer/surveillance.py`
+implements the five reporting-input conditions using an externally supplied
+synthetic daily panel. They are: unperturbed early history, independent
+removal of 20% of eligible positive reports, a three-day report shift,
+population-tier reporting at 0.90/0.70, and core/peripheral reporting at
+1.00/0.30. Core membership and any focal site are caller inputs. The function
+does not generate or change evaluation targets. Its outputs were checked on
+synthetic data against the archived perturbation implementation.
