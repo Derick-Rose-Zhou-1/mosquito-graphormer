@@ -29,7 +29,8 @@ def top_k_capture(observed, predicted, k):
     p = np.asarray(predicted, dtype=float).reshape(-1)
     if y.shape != p.shape or not 1 <= k <= y.size:
         raise ValueError("Expected aligned one-dimensional scores and a valid k")
-    # Stable input order resolves ties; callers should pre-sort by a fixed location key.
-    truth = set(np.argsort(-y, kind="stable")[:k])
-    ranked = set(np.argsort(-p, kind="stable")[:k])
+    # Match the archived scenario analysis. Callers first sort by a fixed site key.
+    # At a tied boundary NumPy's default argsort determines the selected sites.
+    truth = set(np.argsort(y)[-k:])
+    ranked = set(np.argsort(p)[-k:])
     return len(truth & ranked) / k

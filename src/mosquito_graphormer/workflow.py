@@ -106,14 +106,15 @@ def predict_split(model: MosquitoGraphormer, panel: dict, split: int,
 def fit_and_evaluate(panel: dict, output_dir: str | Path, seed: int,
                      *, max_epochs: int = 60, batch_size: int = 16,
                      learning_rate: float = 1e-3, weight_decay: float = 1e-4,
-                     patience: int = 15, device_name: str = "cpu") -> dict:
+                     patience: int = 15, gradient_clip_norm: float = 1.0,
+                     device_name: str = "cpu") -> dict:
     """Fit one seed with CoV4 and select its checkpoint by development RMSE.
 
     No test target is read by the optimisation or checkpoint-selection loop.
     This general entry point does not encode study-specific split boundaries.
     """
-    if min(max_epochs, batch_size, patience) < 1:
-        raise ValueError("Epochs, batch size and patience must be positive")
+    if min(max_epochs, batch_size, patience) < 1 or gradient_clip_norm <= 0:
+        raise ValueError("Epochs, batch size, patience and gradient clip must be positive")
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     random.seed(seed)
@@ -147,7 +148,7 @@ def fit_and_evaluate(panel: dict, output_dir: str | Path, seed: int,
             if not torch.isfinite(loss):
                 raise FloatingPointError("Nonfinite training loss")
             loss.backward()
-            torch.nn.utils.clip_grad_norm_(model.parameters(), 5.0)
+            torch.nn.utils.clip_grad_norm_(model.parameters(), gradient_clip_norm)
             optimizer.step()
         predicted, observed = predict_split(model, panel, 1, batch_size, device)
         dev_mask = panel["mask"][panel["split"] == 1]

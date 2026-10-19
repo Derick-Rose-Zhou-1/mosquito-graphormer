@@ -8,9 +8,10 @@ Code for the selected temporal–graph forecasting architecture, its coupled SEI
 - `src/mosquito_graphormer/mechanism.py`: coupled SEI–SEIR state updates and `SEISEIRHead`.
 - `src/mosquito_graphormer/loss.py`: four-component coefficient-of-variation loss.
 - `src/mosquito_graphormer/evaluation.py` and `plotting.py`: generic metrics and curve plotting.
+- `src/mosquito_graphormer/replicate_analysis.py`: matched-target checks, per-run H1–H7 metrics and 95% t intervals for the mean metric across model initialisations.
 - `src/mosquito_graphormer/preprocessing.py` and `workflow.py`: reusable input transforms, aligned-panel validation, training, development checkpoint selection and test evaluation.
 - `src/mosquito_graphormer/surveillance.py`: reporting perturbations applied to an externally supplied synthetic epidemic while retaining its reference targets.
-- `scripts/`: a runnable generated-panel example, training entry point and curve plotting entry point; see [WORKFLOW.md](WORKFLOW.md).
+- `scripts/`: a runnable generated-panel example, training entry point, curve plotting entry point and prediction-summary entry point; see [WORKFLOW.md](WORKFLOW.md).
 - `tests/`: synthetic-input execution and gradient check.
 
 Install the packages in `requirements.txt`, add `src` to `PYTHONPATH`, then run `python -m unittest discover -s tests -v`.
@@ -20,3 +21,5 @@ Inputs are supplied by the data holder. The model expects a 14-step history, ali
 The mobility window is ordered oldest to newest. Its non-negative exponential lag weights assign the greatest weight to the newest matrix. A synthetic test checks this direction.
 
 This repository contains one compact, name-cleaned implementation of the selected architecture and a generic end-to-end fitting example. The model changes were checked for output equivalence on synthetic input. It is **not a complete independent reproduction of the manuscript results**: those estimates require restricted inputs, study-specific input construction, split manifests, analysis-specific aggregation and figure source data that are not published here. The plotting entry point produces a generic aligned case curve, not the manuscript figures.
+
+[MANUSCRIPT_ANALYSES.md](MANUSCRIPT_ANALYSES.md) distinguishes the ten-model prediction ranges in analyses 1–4 from the ten-run mean-metric t intervals in analysis 5. The public scenario summariser uses the same top-10 ranking calculation as the archived fifth analysis and rejects mismatched test targets. No study predictions are included.

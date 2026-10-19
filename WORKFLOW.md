@@ -30,6 +30,38 @@ example. The reported article analyses also use setting-specific model fits,
 external inputs, split rules and aggregation steps not encoded in this generic
 panel runner.
 
+## Summarising the fifth analysis from externally supplied predictions
+
+The fifth analysis holds one synthetic epidemic and its unperturbed continuous
+simulated incidence target fixed. Five reporting-input scenarios are evaluated
+with ten independently initialised model runs per model. The archived fifth
+analysis reused training origins for checkpoint monitoring and had no separate
+development window. This differs from the generic panel example above, which
+requires a distinct development split.
+
+The prediction-summary entry point expects externally supplied files at
+`seed_<seed>/<scenario>/outputs/<model>/predictions.csv`. Each CSV contains
+`city,origin_date,target_date,horizon,observed,predicted`. The `city` value is
+only a matching key; the repository includes no real site identifiers or rows.
+All runs must have identical target keys and observed values. Pass each seed,
+scenario and model name as a repeated option:
+
+```shell
+python scripts/summarize_scenarios.py --runs /path/to/external/runs \
+  --output /path/to/summary --seed 3101 --seed 3102 \
+  --scenario sparse --model Full
+```
+
+For the manuscript comparison, supply all ten model seeds and all five
+reporting conditions and three models. The output includes H1–H7 per-run
+metrics, means, sample standard deviations, two-sided 95% t intervals for
+each mean metric, a target-key audit and SHA-256 hashes of the prediction
+inputs. The reported t intervals describe variability across model
+initialisations within that fixed epidemic. They are neither prediction
+intervals nor intervals across independently simulated epidemics. The top-10
+calculation follows the archived NumPy `argsort` rule after sorting by site
+key, including its tie behaviour.
+
 `apply_reporting_scenario` in `src/mosquito_graphormer/surveillance.py`
 implements the five reporting-input conditions using an externally supplied
 synthetic daily panel. They are: unperturbed early history, independent

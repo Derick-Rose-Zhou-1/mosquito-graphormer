@@ -21,6 +21,7 @@ def main() -> None:
     parser.add_argument("--learning-rate", type=float, default=1e-3)
     parser.add_argument("--weight-decay", type=float, default=1e-4)
     parser.add_argument("--patience", type=int, default=15)
+    parser.add_argument("--gradient-clip", type=float, default=1.0)
     parser.add_argument("--device", default="cpu")
     args = parser.parse_args()
     panel = load_panel(args.panel)
@@ -28,7 +29,8 @@ def main() -> None:
         panel, args.output, args.seed,
         max_epochs=args.epochs, batch_size=args.batch_size,
         learning_rate=args.learning_rate, weight_decay=args.weight_decay,
-        patience=args.patience, device_name=args.device,
+        patience=args.patience, gradient_clip_norm=args.gradient_clip,
+        device_name=args.device,
     )
     print(f"seed={args.seed} best_epoch={report['best_epoch']} "
           f"development_rmse={report['development_rmse']:.5g}")
