@@ -12,3 +12,13 @@ __pycache__/
 *.json
 *.zip
 *.gz
+*.tsv
+*.pdf
+*.png
+*.svg
+*.tiff
+*.pptx
+*.docx
+data/
+outputs/
+cache/
