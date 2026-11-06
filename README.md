@@ -14,21 +14,7 @@ Code for the selected temporal–graph forecasting architecture, its coupled SEI
 - `ablations.py`, `ablation_analysis.py` and `spatial_analysis.py`: matched-component settings, paired-seed summaries and city-exclusion analysis; see [ADDITIONAL_ANALYSES.md](ADDITIONAL_ANALYSES.md).
 - `baseline_temporal.py` and `baseline_seir.py`: archived TCN and Graphormer–SEIR comparator architectures, with distinct input contracts documented in [ADDITIONAL_ANALYSES.md](ADDITIONAL_ANALYSES.md).
 - `scripts/`: a runnable generated-panel example, training entry point, curve plotting entry point and prediction-summary entry point; see [WORKFLOW.md](WORKFLOW.md).
+- `src/mosquito_graphormer/figures/`: manuscript figure rendering and PDF assembly.
 - `tests/`: synthetic-input execution and gradient check.
 
 Install the packages in `requirements.txt`, add `src` to `PYTHONPATH`, then run `python -m unittest discover -s tests -v`.
-
-Inputs are supplied by the data holder. The model expects a 14-step history, aligned feature and movement tensors, a geographic support matrix, population on the `log1p(persons)` scale, and externally calculated mechanistic priors. Its output has seven forecast horizons. The geographic and movement inputs must use consistent node order and the same direction convention as the source data. No study observations, movement matrices, locations, dates, fitted weights, splits or figures are included.
-
-The mobility window is ordered oldest to newest. Its non-negative exponential lag weights assign the greatest weight to the newest matrix. A synthetic test checks this direction.
-
-This repository contains one compact, name-cleaned implementation of the selected architecture and a generic end-to-end fitting example. The model changes were checked for output equivalence on synthetic input. It is **not a complete independent reproduction of the manuscript results**: those estimates require restricted inputs, study-specific input construction, split manifests, analysis-specific aggregation and figure source data that are not published here. The generic plotting entry point remains available. Final-study figure workflows are now separately provided; see [FIGURES.md](FIGURES.md).
-
-[MANUSCRIPT_ANALYSES.md](MANUSCRIPT_ANALYSES.md) distinguishes the ten-model prediction ranges in analyses 1–4 from the ten-run mean-metric t intervals in analysis 5. The public scenario summariser uses the same top-10 ranking calculation as the archived fifth analysis and rejects mismatched test targets. No study predictions are included.
-
-
-## Manuscript plotting code
-
-See [FIGURES.md](FIGURES.md) for the modular figure renderers, input requirements,
-external input contracts and validation limits. No case data or generated figures
-are included. This release does not add study-specific training drivers.
