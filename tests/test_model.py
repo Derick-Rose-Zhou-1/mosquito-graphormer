@@ -43,6 +43,11 @@ class ModelTests(unittest.TestCase):
         self.assertEqual(list(detail["weights"].values()), [0.25] * 4)
         total.backward()
         self.assertGreater(float(model.backbone.parameter_head.delta.weight.grad.abs().sum()), 0)
+        model.eval()
+        with torch.no_grad():
+            without_labels = model(batch)["raw_prediction"]
+            with_labels = model({**batch, "future_observed": torch.full((1, 2, 7), 1e9)})["raw_prediction"]
+        torch.testing.assert_close(without_labels, with_labels, rtol=0, atol=0)
 
 
 if __name__ == "__main__":

@@ -9,6 +9,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from mosquito_graphormer.workflow import fit_and_evaluate, load_panel
+from mosquito_graphormer.ablations import ARMS
 
 
 def main() -> None:
@@ -23,6 +24,7 @@ def main() -> None:
     parser.add_argument("--patience", type=int, default=15)
     parser.add_argument("--gradient-clip", type=float, default=1.0)
     parser.add_argument("--device", default="cpu")
+    parser.add_argument("--arm", choices=ARMS, default="FULL")
     args = parser.parse_args()
     panel = load_panel(args.panel)
     report = fit_and_evaluate(
@@ -30,7 +32,7 @@ def main() -> None:
         max_epochs=args.epochs, batch_size=args.batch_size,
         learning_rate=args.learning_rate, weight_decay=args.weight_decay,
         patience=args.patience, gradient_clip_norm=args.gradient_clip,
-        device_name=args.device,
+        device_name=args.device, arm=args.arm,
     )
     print(f"seed={args.seed} best_epoch={report['best_epoch']} "
           f"development_rmse={report['development_rmse']:.5g}")

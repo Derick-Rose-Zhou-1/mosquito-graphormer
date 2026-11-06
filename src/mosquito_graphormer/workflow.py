@@ -15,6 +15,7 @@ import numpy as np
 import torch
 
 from .config import FEATURE_NAMES, model_config
+from .ablations import arm_config
 from .evaluation import forecast_metrics
 from .loss import CoVFourLoss
 from .model import ForecastBackbone, MosquitoGraphormer
@@ -107,7 +108,7 @@ def fit_and_evaluate(panel: dict, output_dir: str | Path, seed: int,
                      *, max_epochs: int = 60, batch_size: int = 16,
                      learning_rate: float = 1e-3, weight_decay: float = 1e-4,
                      patience: int = 15, gradient_clip_norm: float = 1.0,
-                     device_name: str = "cpu") -> dict:
+                     device_name: str = "cpu", arm: str = "FULL") -> dict:
     """Fit one seed with CoV4 and select its checkpoint by development RMSE.
 
     No test target is read by the optimisation or checkpoint-selection loop.
@@ -121,7 +122,7 @@ def fit_and_evaluate(panel: dict, output_dir: str | Path, seed: int,
     np.random.seed(seed)
     torch.manual_seed(seed)
     device = torch.device(device_name)
-    cfg = model_config()
+    cfg = arm_config(model_config(), arm)
     model = MosquitoGraphormer(
         ForecastBackbone(cfg, len(FEATURE_NAMES), panel["x"].shape[2], FEATURE_NAMES)
     ).to(device)
@@ -175,7 +176,7 @@ def fit_and_evaluate(panel: dict, output_dir: str | Path, seed: int,
                 "config": cfg}, output_dir / "checkpoint.pt")
     np.savez_compressed(output_dir / "test_predictions.npz",
                         predicted=predicted, observed=observed, mask=test_mask)
-    report = {"seed": seed, "best_epoch": best_epoch,
+    report = {"seed": seed, "arm": arm, "best_epoch": best_epoch,
               "development_rmse": best_rmse, "metrics": scores}
     (output_dir / "metrics.json").write_text(json.dumps(report, indent=2, allow_nan=True) + "\n")
     return report
