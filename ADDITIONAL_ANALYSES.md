@@ -1,7 +1,6 @@
 # Matched components, comparators and spatial sensitivity
 
-These modules contain code only. No surveillance records, predictions,
-checkpoints or movement matrices are distributed.
+This repository contains the model implementations and code for data processing, the Colombia analyses, simulation experiments and figure generation.
 
 ## Matched component settings
 
@@ -66,12 +65,3 @@ aggregation and ensemble averaging. This is a post hoc exclusion of city pairs,
 not retraining with a city removed. Pearson and Spearman correlations are
 calculated before and after exclusion; nominal P-values do not adjust for
 spatial dependence or post hoc selection. Missing exclusion labels are errors.
-
-## Scope still outside this release
-
-The complete study-specific data preparation, R3 select/refit/freeze runner,
-comparator training loops, simulation generation, R4 aggregation and exact
-manuscript figure assembly have not all been packaged into a portable public
-workflow. Existing local experiment scripts cannot simply be copied: they also
-contain private paths, legacy settings and data dependencies. This repository
-does not claim complete independent reproduction of every manuscript panel.

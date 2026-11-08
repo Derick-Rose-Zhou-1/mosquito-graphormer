@@ -1,6 +1,6 @@
 # Mosquito-Graphormer
 
-Code for the selected temporal–graph forecasting architecture, its coupled SEI–SEIR head, four-component CoV loss, external-panel fitting, evaluation metrics and generic plotting.
+This repository contains the model implementations and code for data processing, the Colombia analyses, simulation experiments and figure generation.
 
 ## Contents
 
@@ -18,3 +18,11 @@ Code for the selected temporal–graph forecasting architecture, its coupled SEI
 - `tests/`: synthetic-input execution and gradient check.
 
 Install the packages in `requirements.txt`, add `src` to `PYTHONPATH`, then run `python -m unittest discover -s tests -v`.
+
+## License
+
+The code in this repository is released under the [MIT License](LICENSE). Use, modification and redistribution, including commercial use, are permitted subject to the license terms.
+
+## Data availability
+
+The CDC-provided surveillance data used in this study cannot be publicly shared and are not included in this repository. The code license does not grant rights to these data.
