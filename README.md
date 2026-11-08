@@ -21,8 +21,4 @@ Install the packages in `requirements.txt`, add `src` to `PYTHONPATH`, then run 
 
 ## License
 
-The code in this repository is released under the [MIT License](LICENSE). Use, modification and redistribution, including commercial use, are permitted subject to the license terms.
-
-## Data availability
-
-The CDC-provided surveillance data used in this study cannot be publicly shared and are not included in this repository. The code license does not grant rights to these data.
+The code is released under the [MIT License](LICENSE).
